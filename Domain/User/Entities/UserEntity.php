@@ -9,14 +9,34 @@ class UserEntity
 {
 	use MethodsMagicsTrait;
 
+	protected ?string $email;
+	protected ?string $password;
+	protected ?string $name;
+	protected Uuid $id;
+
 	public function __construct(
-		protected string $email,
-		protected string $password,
-		protected ?string $name = null,
-		protected ?Uuid $id = null
+		?string $email = null,
+		?string $password = null,
+		?string $name = null,
+		?Uuid $id = null
 	) {
-		$this->id = $this->id ?? Uuid::random();
-		$this->validate();
+		$this->email = $email;
+		$this->password = $password;
+		$this->name = $name;
+		$this->id = $id ?? Uuid::random();
+	}
+
+	public static function signin(string $id,string $email, string $password, ?string $name = null): self
+	{
+		$user = new self($email, $password, $name, new Uuid($id));
+		Validation::notEmpty($user->email);
+		Validation::notEmpty($user->password);
+		return $user;
+	}
+
+	public static function fromReadModel(string $email, ?string $name, string $id): self
+	{
+		return new self($email, null, $name, new Uuid($id));
 	}
 
 	public function alterPassword(string $newPassword): void
@@ -24,15 +44,18 @@ class UserEntity
 		$this->password = password_hash($newPassword, PASSWORD_BCRYPT);
 	}
 
-	public function signup(): void
+	public function signup(string $email, string $password, ?string $name = null): self
 	{
-		$this->password = password_hash($this->password, PASSWORD_BCRYPT);
+		$user = new self($email, $password, $name, Uuid::random());
+		Validation::notEmpty($user->email);
+		Validation::notEmpty($user->password);
+		$this->password = password_hash($password, PASSWORD_BCRYPT);
+		return $user;
 	}
 
-	public function validate(): void
+	public function isPasswordValid(string $password): bool
 	{
-		Validation::notEmpty($this->email);
-		Validation::notEmpty($this->password);
+		return password_verify($password, $this->password);
 	}
 
 }
