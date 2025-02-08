@@ -27,6 +27,7 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->renderable(function (NotFoundHttpException $e, $request) {
+
             if($request->is('api/*')) {
                 return response()->json([
                     'status' => 'error',
@@ -44,6 +45,9 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof EntityValidationException)
             return $this->showError( $exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY );
+
+
+        return parent::render($request, $exception);
     }
 
 
