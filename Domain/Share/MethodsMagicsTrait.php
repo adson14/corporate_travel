@@ -12,4 +12,9 @@ trait MethodsMagicsTrait
 		$className = get_class($this);
 		throw new \Exception("Undefined property: {$className}::\${$name}");
 	}
+
+	public function id() : string
+	{
+		return (string) $this->id;
+	}
 }
