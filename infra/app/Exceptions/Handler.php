@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Domain\Share\Exceptions\EntityValidationException;
+use Domain\Share\Exceptions\EntityValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

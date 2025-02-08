@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Domain\User;
-use App\Domain\Share\Validation;
-use App\Domain\Share\MethodsMagicsTrait;
-use App\Domain\Share\ValueObjects\Uuid;
+namespace Domain\User\Entities;
+use Domain\Share\MethodsMagicsTrait;
+use Domain\Share\Validation;
+use Domain\Share\ValueObjects\Uuid;
 
 class UserEntity
 {

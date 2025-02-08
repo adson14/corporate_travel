@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Share;
+namespace Domain\Share;
 
-use App\Domain\Share\Exceptions\EntityValidationException;
+use Domain\Share\Exceptions\EntityValidationException;
 
 class Validation
 {

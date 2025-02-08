@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Share;
+namespace Domain\Share;
 
 trait MethodsMagicsTrait
 {

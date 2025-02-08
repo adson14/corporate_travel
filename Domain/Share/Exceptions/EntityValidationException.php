@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\Share\Exceptions;
+namespace Domain\Share\Exceptions;
 
 class EntityValidationException extends \Exception
 {
