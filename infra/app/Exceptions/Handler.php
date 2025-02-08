@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Domain\Share\Exceptions\EntityValidationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -24,17 +26,33 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (NotFoundHttpException $e, $request) {
+            if($request->is('api/*')) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Página não encontrada.',
+                    'redirect' => '/',
+                    'code' => Response::HTTP_NOT_FOUND
+
+                ], Response::HTTP_NOT_FOUND);
+            }
         });
+
     }
 
-    public function render($request, Throwable $exception): JsonResponse
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof EntityValidationException)
+            return $this->showError( $exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY );
+    }
+
+
+    public function showError(string $message, int $code)
     {
         return response()->json([
-            'mensagem' => $exception->getMessage(),
-            'codigo' => $exception->getCode() ?: 500,
-            'erro' => class_basename($exception),
-        ], method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500);
+            'status' => 'error',
+            'message' => $message,
+        ], $code);
     }
+
 }
