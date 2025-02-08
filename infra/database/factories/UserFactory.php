@@ -42,4 +42,11 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function withPassword(string $password): self
+    {
+        return $this->state([
+            'password' => Hash::make($password),
+        ]);
+    }
 }
