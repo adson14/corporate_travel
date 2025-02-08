@@ -3,8 +3,11 @@
 namespace App\Exceptions;
 
 use Domain\Share\Exceptions\EntityValidationException;
+use Domain\Share\Exceptions\RepositoryException;
+use Domain\Share\Exceptions\UseCaseException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -46,6 +49,17 @@ class Handler extends ExceptionHandler
         if ($exception instanceof EntityValidationException)
             return $this->showError( $exception->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY );
 
+        if ($exception instanceof NotFoundHttpException)
+            return $this->showError( $exception->getMessage(), Response::HTTP_NOT_FOUND );
+
+        if ($exception instanceof RepositoryException)
+            return $this->showError( $exception->getMessage(), Response::HTTP_BAD_REQUEST );
+
+        if ($exception instanceof UseCaseException)
+            return $this->showError( $exception->getMessage(), Response::HTTP_BAD_REQUEST );
+
+        if($exception instanceof ValidationException)
+            return $this->showError( $exception->getMessage(), Response::HTTP_BAD_REQUEST );
 
         return parent::render($request, $exception);
     }
