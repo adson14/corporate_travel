@@ -4,7 +4,7 @@ namespace App\Domain\Share;
 
 use App\Domain\Share\Exceptions\EntityValidationException;
 
-class EntityValidation
+class Validation
 {
 	public static function notEmpty(mixed $value): void
 	{
