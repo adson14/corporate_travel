@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
+class BaseModel extends Model
+{
+
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+    protected static function boot()
+    {
+        parent::boot();
+        if(!\Illuminate\Support\Facades\App::runningInConsole()){
+            static::addGlobalScope('user', function (Builder $builder) {
+                if(empty(Auth::user())){
+                    throw  new \Exception('User not authenticated'. $builder->getModel()::class);
+                }
+            });
+        }
+
+        static::creating(function ($model) {
+            $user = Auth::user();
+            if(empty($user)){
+                return;
+            }
+
+            if(in_array('user_id', $model->fillable)) {
+                $model->user_id = $user->id;
+            }
+        });
+    }
+}

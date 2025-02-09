@@ -16,12 +16,13 @@ class OrderEntity
 	public function __construct(
 		protected ?UserEntity $user,
 		protected ?string $destiny,
-		protected ?Date $departureDate,
-		protected ?Date $returnDate,
-		protected ?OrderStatusEnum $status,
+		protected ?\DateTime $departureDate,
+		protected ?\DateTime $returnDate,
+		protected ?OrderStatusEnum $status = null,
 		protected ?Uuid $id = null,
 	) {
 		$this->id = $this->id ?? Uuid::random();
+		$this->status = $this->status ?? OrderStatusEnum::PENDING;
 		$this->validate();
 	}
 

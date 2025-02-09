@@ -1,12 +1,12 @@
 <?php
 
 
+use Carbon\Carbon;
 use Database\Factories\UserFactory;
 use Domain\Order\Entities\OrderEntity;
 use Domain\Order\Enum\OrderStatusEnum;
 use Domain\Share\Exceptions\EntityValidationException;
 use Domain\User\Entities\UserEntity;
-use Illuminate\Support\Facades\Date;
 
 test('should be create an order object', function () {
 
@@ -20,8 +20,8 @@ test('should be create an order object', function () {
         id: $user->id
       ),
       destiny: 'São Paulo',
-      departureDate: new Date(),
-      returnDate: new Date(),
+      departureDate: (Carbon::now())->toDateTime(),
+      returnDate: (Carbon::now())->toDateTime(),
       status: OrderStatusEnum::PENDING
     );
 
@@ -41,8 +41,8 @@ test('should be approve an order', function () {
             id: $user->id
         ),
         destiny: 'São Paulo',
-        departureDate: new Date(),
-        returnDate: new Date(),
+        departureDate: (Carbon::now())->toDateTime(),
+        returnDate: (Carbon::now())->toDateTime(),
         status: OrderStatusEnum::PENDING
     );
 
@@ -61,8 +61,8 @@ test('should be cancel an order', function () {
             id: $user->id
         ),
         destiny: 'São Paulo',
-        departureDate: new Date(),
-        returnDate: new Date(),
+        departureDate: (Carbon::now())->toDateTime(),
+        returnDate: (Carbon::now())->toDateTime(),
         status: OrderStatusEnum::PENDING
     );
 
@@ -82,8 +82,8 @@ test('should be  return exception when validation fail', function () {
                 id: $user->id
             ),
             destiny: null,
-            departureDate: new Date(),
-            returnDate: new Date(),
+            departureDate: (Carbon::now())->toDateTime(),
+            returnDate: (Carbon::now())->toDateTime(),
             status: OrderStatusEnum::PENDING
         );
     })->toThrow(EntityValidationException::class);
