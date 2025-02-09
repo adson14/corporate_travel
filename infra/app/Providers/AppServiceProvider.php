@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Repositories\Eloquent\OrderRepository;
 use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Presenters\PaginationPresenter;
 use App\Services\AuthService;
 use Application\Contract\IAuthService;
 use Domain\Order\Repositories\IOrderRepository;
+use Domain\Share\Repositories\IPagination;
 use Domain\User\Repositories\IUserRepository;
 use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
@@ -38,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             IOrderRepository::class,
             OrderRepository::class
+        );
+
+        $this->app->bind(
+            IPagination::class,
+            PaginationPresenter::class
         );
     }
 

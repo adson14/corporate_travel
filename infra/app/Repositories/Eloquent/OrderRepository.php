@@ -2,12 +2,15 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Models\BaseModel;
 use App\Models\Order;
+use App\Repositories\Presenters\PaginationPresenter;
 use Domain\Order\Entities\OrderEntity;
 use Domain\Order\Enum\OrderStatusEnum;
 use Domain\Order\Repositories\IOrderRepository;
 use Domain\Share\Exceptions\NotFoundException;
 use Domain\Share\Exceptions\RepositoryException;
+use Domain\Share\Repositories\IPagination;
 use Domain\Share\ValueObjects\Uuid;
 use Domain\User\Entities\UserEntity;
 
@@ -17,6 +20,43 @@ class OrderRepository implements IOrderRepository
     public function __construct(
         protected Order $orderModel
     ){}
+
+    public function all(array $params = [], array $fields = [], ?int $page = null): IPagination
+    {
+
+        $query = $this->orderModel::query();
+
+        if (!empty($fields)) {
+            $query->select($fields);
+        }
+
+        if (!empty($params['destiny'])) {
+            $query->where('destiny', 'LIKE', "%{$params['destiny']}%");
+        }
+
+        if (!empty($params['departure_date_ini'])) {
+            $query->whereDate('departure_date',  '>=', $params['departure_date_ini']);
+        }
+
+        if (!empty($params['departure_date_end'])) {
+            $query->whereDate('departure_date',  '<=', $params['departure_date_end']);
+        }
+
+        if (!empty($params['return_date_ini'])) {
+            $query->whereDate('return_date',  '>=', $params['return_date_ini']);
+        }
+
+        if (!empty($params['return_date_end'])) {
+            $query->whereDate('return_date',  '<=', $params['return_date_end']);
+        }
+
+        if (!empty($params['status'])) {
+            $query->where('status_order', $params['status']);
+        }
+        $paginator = $query->has('user')->with('user')->paginate(perPage: BaseModel::itemsPerPage(),page: $page);
+
+        return new PaginationPresenter($paginator);
+    }
 
     public function insert(OrderEntity $order): void
     {

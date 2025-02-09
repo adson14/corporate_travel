@@ -29,6 +29,7 @@ Route::middleware(['cors'])->group(function () {
         });
 
         Route::controller(OrderController::class)->group(function () {
+            Route::get('order', 'list');
             Route::post('order', 'create');
             Route::get('order/{id}', 'show');
         });

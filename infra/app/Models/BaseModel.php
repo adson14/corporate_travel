@@ -12,6 +12,14 @@ class BaseModel extends Model
     public $incrementing = false;
 
     protected $keyType = 'string';
+
+    protected $perPage = 10;
+
+    public static function itemsPerPage() : int
+    {
+        $model = new BaseModel();
+        return $model->perPage;
+    }
     protected static function boot()
     {
         parent::boot();

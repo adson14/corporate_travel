@@ -27,4 +27,13 @@ class OrderFactory extends Factory
             'status_order' => 'PENDING',
         ];
     }
+
+    public function withdestiny($destiny)
+    {
+        return $this->state(function (array $attributes) use ($destiny) {
+            return [
+                'destiny' => $destiny,
+            ];
+        });
+    }
 }

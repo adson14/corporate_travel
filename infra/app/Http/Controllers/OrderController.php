@@ -3,14 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InsertOrderRequest;
+use App\Http\Requests\ListOrderRequest;
 use Application\UseCases\Order\InsertOrder\DTO\InsertOrderInputDto;
 use Application\UseCases\Order\InsertOrder\InsertOrderUseCase;
+use Application\UseCases\Order\ListOrder\DTO\FilterOrderDto;
+use Application\UseCases\Order\ListOrder\DTO\ListOrderInputDto;
+use Application\UseCases\Order\ListOrder\ListOrderUseCase;
 use Application\UseCases\Order\ShowOrder\DTO\ShowOrderInputDto;
 use Application\UseCases\Order\ShowOrder\ShowOrderUseCase;
+use Domain\Order\Enum\OrderStatusEnum;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
 {
+
+    public function list(ListOrderRequest $request, ListOrderUseCase $useCase)
+    {
+        $request->validated();
+        $filters = new FilterOrderDto(
+            destiny: request('destiny') ?? null,
+            status: request('status'),
+            departure_date_ini: request('departure_date_ini')  ??  null,
+            departure_date_end: request('departure_date_end') ?? null,
+            return_date_ini: request('return_date_ini') ?? null,
+            return_date_end: request('return_date_end') ?? null
+        );
+        $page = request('page') ?? 1;
+        $input = new ListOrderInputDto(page:$page, filters: $filters);
+        $output = (array) $useCase->execute($input);
+        $output['options'] = $this->options();
+        return response()->json($output)->setStatusCode(Response::HTTP_OK);
+    }
+
     public function create(InsertOrderRequest $request, InsertOrderUseCase $useCase)
     {
         $response = $useCase->execute(
@@ -34,5 +59,10 @@ class OrderController extends Controller
         return response()->json($response)->setStatusCode(Response::HTTP_OK);
     }
 
-
+    public function options()
+    {
+        return [
+            'status' => OrderStatusEnum::toArray()
+        ];
+    }
 }
