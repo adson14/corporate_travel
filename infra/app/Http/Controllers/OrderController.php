@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InsertOrderRequest;
 use Application\UseCases\Order\InsertOrder\DTO\InsertOrderInputDto;
 use Application\UseCases\Order\InsertOrder\InsertOrderUseCase;
+use Application\UseCases\Order\ShowOrder\DTO\ShowOrderInputDto;
+use Application\UseCases\Order\ShowOrder\ShowOrderUseCase;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
@@ -21,4 +23,16 @@ class OrderController extends Controller
         );
         return response()->json($response)->setStatusCode(Response::HTTP_CREATED);
     }
+
+    public function show(ShowOrderUseCase $useCase, string $id)
+    {
+        $response = $useCase->execute(
+            new ShowOrderInputDto(
+                order_id: $id
+            )
+        );
+        return response()->json($response)->setStatusCode(Response::HTTP_OK);
+    }
+
+
 }
