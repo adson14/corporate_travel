@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Domain\Share\Exceptions\EntityValidationException;
+use Domain\Share\Exceptions\NotFoundException;
 use Domain\Share\Exceptions\RepositoryException;
 use Domain\Share\Exceptions\UseCaseException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -60,6 +61,9 @@ class Handler extends ExceptionHandler
 
         if($exception instanceof ValidationException)
             return $this->showError( $exception->getMessage(), Response::HTTP_BAD_REQUEST );
+
+        if($exception instanceof NotFoundException)
+            return $this->showError( $exception->getMessage(), Response::HTTP_NOT_FOUND );
 
         return parent::render($request, $exception);
     }

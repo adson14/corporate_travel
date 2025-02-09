@@ -12,7 +12,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class RegisterUserUseCase
 {
 	public function __construct(
-		private IUserRepository $userRepository
+		private readonly IUserRepository $userRepository
 	)
 	{}
 

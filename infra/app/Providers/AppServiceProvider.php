@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Repositories\Eloquent\UserRepository;
+use App\Services\AuthService;
+use Application\Contract\IAuthService;
 use Domain\User\Repositories\IUserRepository;
 use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
@@ -13,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->bindRepositories();
+        $this->bindServices();
     }
 
     /**
@@ -28,6 +31,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(
             IUserRepository::class,
             UserRepository::class
+        );
+    }
+
+    private function bindServices(): void
+    {
+        $this->app->bind(
+            IAuthService::class,
+            AuthService::class
         );
     }
 }

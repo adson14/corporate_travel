@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use Application\UseCases\User\LoginUser\DTO\LoginUserInputDto;
+use Application\UseCases\User\LoginUser\LoginUserUseCase;
 use Application\UseCases\User\RegisterUser\DTO\RegisterUserInputDto;
 use Application\UseCases\User\RegisterUser\RegisterUserUseCase;
 use Illuminate\Http\Request;
@@ -14,15 +16,15 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request, LoginUserUseCase $useCase)
     {
-        $credentials = $request->only('email', 'password');
-
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Email ou senha inválido'], 401);
-        }
-
-        return $this->respondWithToken($token);
+        $response = $useCase->execute(
+            new LoginUserInputDto(
+                email: $request->email,
+                password: $request->password
+            )
+        );
+        return response()->json($response)->setStatusCode(Response::HTTP_OK);
     }
 
     public function register(RegisterRequest $request, RegisterUserUseCase $useCase)
