@@ -26,7 +26,8 @@ class OrderRepository implements IOrderRepository
                  'destiny' => $order->destiny,
                  'departure_date' => $order->departureDate->format('Y-m-d'),
                  'return_date' => $order->returnDate->format('Y-m-d'),
-                 'status_order' => $order->status->value
+                 'status_order' => $order->status->value,
+                 'user_id' => $order->user->id
             ]);
         } catch (\Exception $e) {
             throw new RepositoryException('Failed to insert order.');
@@ -35,7 +36,7 @@ class OrderRepository implements IOrderRepository
 
     public function find(string $id): OrderEntity
     {
-        if(!$orderModel = $this->orderModel->find($id)){
+        if(!$orderModel = $this->orderModel->has('user')->with('user')->find($id)){
             throw new NotFoundException('Order not found.');
         }
 
@@ -52,6 +53,7 @@ class OrderRepository implements IOrderRepository
             departureDate: $order->departure_date,
             returnDate: $order->return_date,
             status: OrderStatusEnum::from($order->status_order),
+            created_at: $order->created_at,
             id: new Uuid($order->id)
         );
     }

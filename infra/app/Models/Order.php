@@ -25,6 +25,7 @@ class Order extends BaseModel
         'departure_date',
         'return_date',
         'status_order',
+        'created_at',
     ];
 
     public function user()

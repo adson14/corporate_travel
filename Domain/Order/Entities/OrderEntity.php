@@ -7,7 +7,6 @@ use Domain\Share\MethodsMagicsTrait;
 use Domain\Share\Validation;
 use Domain\Share\ValueObjects\Uuid;
 use Domain\User\Entities\UserEntity;
-use Illuminate\Support\Facades\Date;
 
 class OrderEntity
 {
@@ -19,6 +18,7 @@ class OrderEntity
 		protected ?\DateTime $departureDate,
 		protected ?\DateTime $returnDate,
 		protected ?OrderStatusEnum $status = null,
+		protected ?\DateTime $created_at = null,
 		protected ?Uuid $id = null,
 	) {
 		$this->id = $this->id ?? Uuid::random();

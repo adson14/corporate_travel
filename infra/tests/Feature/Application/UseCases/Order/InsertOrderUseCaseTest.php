@@ -1,6 +1,8 @@
 <?php
 use App\Models\Order;
+use App\Models\User;
 use App\Repositories\Eloquent\OrderRepository;
+use App\Repositories\Eloquent\UserRepository;
 use Application\UseCases\Order\InsertOrder\DTO\InsertOrderInputDto;
 use Application\UseCases\Order\InsertOrder\DTO\InsertOrderOutputDto;
 use Application\UseCases\Order\InsertOrder\InsertOrderUseCase;
@@ -9,7 +11,7 @@ use Database\Factories\UserFactory;
 test( 'it create a new order', function () {
     $userCreated = UserFactory::new()->withPassword('senha_personalizada')->create(['password' => 12345678]);
 
-    $useCase = new InsertOrderUseCase(new OrderRepository(new Order()));
+    $useCase = new InsertOrderUseCase(new OrderRepository(new Order()), new UserRepository(new User()));
     $response = $useCase->execute(
         new InsertOrderInputDto(
             user_id: $userCreated->id,

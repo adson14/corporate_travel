@@ -23,15 +23,8 @@ class BaseModel extends Model
             });
         }
 
-        static::creating(function ($model) {
-            $user = Auth::user();
-            if(empty($user)){
-                return;
-            }
-
-            if(in_array('user_id', $model->fillable)) {
-                $model->user_id = $user->id;
-            }
-        });
+//        static::creating(function ($model) {
+//
+//        });
     }
 }
