@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\InsertOrderRequest;
 use App\Http\Requests\ListOrderRequest;
-use Application\UseCases\Order\CancelOrder\CancelOrderUseCase;
-use Application\UseCases\Order\CancelOrder\DTO\CancelOrderInputDto;
+use Application\UseCases\Order\ApproveOrder\ApproveOrderUseCase;
+use Application\UseCases\Order\ApproveOrder\CancelOrderUseCase;
+use Application\UseCases\Order\ApproveOrder\DTO\ApproveOrderInputDto;
+use Application\UseCases\Order\ApproveOrder\DTO\CancelOrderInputDto;
 use Application\UseCases\Order\InsertOrder\DTO\InsertOrderInputDto;
 use Application\UseCases\Order\InsertOrder\InsertOrderUseCase;
 use Application\UseCases\Order\ListOrder\DTO\FilterOrderDto;
@@ -64,6 +66,16 @@ class OrderController extends Controller
     {
         $response = $useCase->execute(
             new CancelOrderInputDto(
+                order_id: $id
+            )
+        );
+        return response()->json($response)->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function approve(ApproveOrderUseCase $useCase, string $id)
+    {
+        $response = $useCase->execute(
+            new ApproveOrderInputDto(
                 order_id: $id
             )
         );

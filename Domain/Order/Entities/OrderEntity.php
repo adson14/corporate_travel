@@ -35,7 +35,7 @@ class OrderEntity
 		Validation::notEmpty($this->user);
 	}
 
-	public function approve(OrderStatusEnum $status): void
+	public function approve(): void
 	{
 		Validation::toBeApproved($this->status->value);
 		$this->status = OrderStatusEnum::APPROVED;

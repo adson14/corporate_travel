@@ -33,6 +33,7 @@ Route::middleware(['cors'])->group(function () {
             Route::post('order', 'create');
             Route::get('order/{id}', 'show');
             Route::put('order/{id}/cancel', 'cancel');
+            Route::put('order/{id}/approve', 'approve');
         });
     });
 });
