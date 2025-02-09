@@ -74,6 +74,23 @@ class OrderRepository implements IOrderRepository
         }
     }
 
+    public function update(OrderEntity $order): void
+    {
+        try{
+            $orderModel = $this->orderModel->find($order->id());
+            $orderModel->update([
+                'destiny' => $order->destiny,
+                'departure_date' => $order->departureDate->format('Y-m-d'),
+                'return_date' => $order->returnDate->format('Y-m-d'),
+                'status_order' => $order->status->value
+            ]);
+        } catch (NotFoundException $e) {
+            throw new RepositoryException('Failed to update order. Order not found.');
+        } catch (\Exception $e) {
+            throw new RepositoryException('Failed to update order.');
+        }
+    }
+
     public function find(string $id): OrderEntity
     {
         if(!$orderModel = $this->orderModel->has('user')->with('user')->find($id)){

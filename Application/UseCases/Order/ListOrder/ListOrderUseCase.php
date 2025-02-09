@@ -18,6 +18,7 @@ class ListOrderUseCase
 	public function execute(ListOrderInputDto $input): ListOrderOutputDto
 	{
 			$fields = [
+				'id',
 				'user_id',
 				'destiny',
 				'departure_date',

@@ -32,6 +32,7 @@ Route::middleware(['cors'])->group(function () {
             Route::get('order', 'list');
             Route::post('order', 'create');
             Route::get('order/{id}', 'show');
+            Route::put('order/{id}/cancel', 'cancel');
         });
     });
 });

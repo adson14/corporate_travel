@@ -12,4 +12,6 @@ interface IOrderRepository
 	public function find(string $id): ?OrderEntity;
 
 	public function all(array $params = [], array $fields = [], ?int $page = null): IPagination;
+
+	public function update(OrderEntity $order): void;
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\InsertOrderRequest;
 use App\Http\Requests\ListOrderRequest;
+use Application\UseCases\Order\CancelOrder\CancelOrderUseCase;
+use Application\UseCases\Order\CancelOrder\DTO\CancelOrderInputDto;
 use Application\UseCases\Order\InsertOrder\DTO\InsertOrderInputDto;
 use Application\UseCases\Order\InsertOrder\InsertOrderUseCase;
 use Application\UseCases\Order\ListOrder\DTO\FilterOrderDto;
@@ -12,7 +14,6 @@ use Application\UseCases\Order\ListOrder\ListOrderUseCase;
 use Application\UseCases\Order\ShowOrder\DTO\ShowOrderInputDto;
 use Application\UseCases\Order\ShowOrder\ShowOrderUseCase;
 use Domain\Order\Enum\OrderStatusEnum;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
@@ -57,6 +58,16 @@ class OrderController extends Controller
             )
         );
         return response()->json($response)->setStatusCode(Response::HTTP_OK);
+    }
+
+    public function cancel(CancelOrderUseCase $useCase, string $id)
+    {
+        $response = $useCase->execute(
+            new CancelOrderInputDto(
+                order_id: $id
+            )
+        );
+        return response()->json($response)->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function options()
