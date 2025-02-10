@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Repositories\Eloquent\OrderRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Presenters\PaginationPresenter;
@@ -27,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        User::observe(UserObserver::class);
     }
 
     private function bindRepositories(): void
