@@ -1,5 +1,6 @@
 <?php
 
+use App\Event\EventDispatcher;
 use App\Models\Order;
 use App\Repositories\Eloquent\OrderRepository;
 use Application\UseCases\Order\ApproveOrder\ApproveOrderUseCase;
@@ -9,7 +10,7 @@ use Database\Factories\OrderFactory;
 
 test( 'it approve an order', function () {
     $orderCreated = OrderFactory::new()->create();
-    $useCase = new ApproveOrderUseCase(new OrderRepository(new Order()));
+    $useCase = new ApproveOrderUseCase(new OrderRepository(new Order()), new EventDispatcher());
     $response = $useCase->execute(
         new ApproveOrderInputDto(
             order_id: $orderCreated->id
