@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
+RUN apt-get install -y gettext-base    
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -37,7 +39,25 @@ RUN pecl install -o -f redis \
 # Set working directory
 WORKDIR /var/www
 
+COPY . .
+
+WORKDIR /var/www/infra
+
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+COPY docker/entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 9000
+
+
 # Copy custom configurations PHP
 COPY docker/php/custom.ini /usr/local/etc/php/conf.d/custom.ini
 
 USER $user
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+
+CMD ["php-fpm"]
