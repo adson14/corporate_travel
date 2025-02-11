@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
+RUN apt-get install -y gettext-base    
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -38,6 +40,8 @@ RUN pecl install -o -f redis \
 WORKDIR /var/www
 
 COPY . .
+
+WORKDIR /var/www/infra
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
