@@ -56,12 +56,19 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims()
+    public function isAdmin()
     {
         $type = $this->roles()
             ->get();
 
         $this->is_admin = $type->contains('name', 'admin');
+
+        return $this->is_admin;
+    }
+
+    public function getJWTCustomClaims()
+    {
+        $this->isAdmin();
 
         return [
             'user_type' => $this->is_admin ? 'admin' : 'standard',

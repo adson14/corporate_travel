@@ -28,6 +28,9 @@ class BaseModel extends Model
                 if(empty(Auth::user())){
                     throw  new \Exception('User not authenticated'. $builder->getModel()::class);
                 }
+                if(in_array('user_id', $builder->getModel()->fillable) && !Auth::user()->isAdmin()) {
+                    $builder->where($builder->getModel()->getTable() . '.user_id', Auth::user()->id);
+                }
             });
         }
 
