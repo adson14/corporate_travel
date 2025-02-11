@@ -15,6 +15,8 @@ class User extends Authenticatable implements JWTSubject
 
     protected $keyType = 'string';
 
+    protected bool $is_admin;
+
     public $incrementing = false;
 
     /**
@@ -56,7 +58,14 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        $type = $this->roles()
+            ->get();
+
+        $this->is_admin = $type->contains('name', 'admin');
+
+        return [
+            'user_type' => $this->is_admin ? 'admin' : 'standard',
+        ];
     }
 
     public function orders()
