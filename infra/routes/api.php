@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -21,6 +22,11 @@ Route::middleware(['cors'])->group(function () {
     Route::post('register', [AuthController::class, 'register']);
 
     Route::middleware('auth:api')->group(function () {
+
+        Route::controller(NotificationController::class)->group(function () {
+            Route::get('/notifications', [NotificationController::class, 'index']);
+            Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead']);
+        });
 
         Route::controller(AuthController::class)->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);

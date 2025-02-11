@@ -26,7 +26,7 @@ class ApproveOrderUseCase
 				new OrderApproveEvent(
 					orderId: $input->order_id,
 					email: $order->user->email,
-					message: 'Your order has been approved'
+					message: 'Sua solicitação foi aprovada.'
 				)
 			);
 
